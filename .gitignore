@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+*.~
+*.m~
+freqout.py
+bird_img/
+cutout_filter.py
