@@ -49,3 +49,68 @@ title('Original')
 subplot(1,2,2);
 imshow(median);
 title('Median filtered')
+
+%% Segmentation
+
+% all at once
+imhist(image, 100);
+
+% or channel wise
+r = image(:,:,1);
+g = image(:,:,2);
+b = image(:,:,3);
+
+[ct_r, x] = imhist(r, 100);
+[ct_g, x] = imhist(g, 100);
+[ct_b, x] = imhist(b, 100);
+
+plot(x, ct_r, 'Red', x, ct_g, 'Green', x, ct_b, 'Blue');
+
+% unlike in Python, don't need to call .copy()
+image_cp = image;
+image_cp(image_cp < 50) = 0;
+
+figure();
+imhist(image_cp);
+
+%% Histogram Equalization
+hist_eq = histeq(image);
+figure();
+imshowpair(image, hist_eq, 'montage')
+title('Histogram equalization')
+
+% to also see histograms
+%imhist(image);
+%figure();
+%imhist(J);
+
+%% Adaptive Histogram Equalization
+% may need to do this one channel at a time
+hist_adapt = adapthisteq(image(:,:,1));
+figure();
+imshowpair(image, hist_adapt, 'montage')
+title('Adaptive histogram equalization')
+
+%% Morphology
+integer_mask = int_mask;
+integer_mask(integer_mask == 255) = 0; % get rid of void class for demo
+integer_mask(integer_mask == 1) = 255; % set 'blue mussel' class to full-scale for demo
+
+structure = ones(2, 2);
+erosion_mask = imerode(integer_mask, structure);
+
+% compare with median filter
+median_mask = medfilt2(integer_mask, [3 3]);
+
+figure();
+subplot(1,3,1);
+imshow(integer_mask);
+title('original')
+
+subplot(1,3,2);
+imshow(erosion_mask);
+title('original')
+
+subplot(1,3,3);
+imshow(median_mask);
+title('original')

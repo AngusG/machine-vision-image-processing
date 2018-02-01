@@ -1,6 +1,7 @@
 %% Feature Extraction
+close('all');
 
-%first with synthetic data
+% first with synthetic data
 % this function does not take a tuple for shape like in Python
 img = zeros(256, 256);
 
@@ -58,3 +59,30 @@ title('Canny')
 
 %% Turn up the noise!
 
+more_noise = rand(sz(1), sz(2)) / 2;
+img = img + more_noise;
+sx = edge(img, 'Sobel', [], 'horizontal');
+sy = edge(img, 'Sobel', [], 'vertical');
+sob = edge(img, 'Sobel');
+canny = edge(img, 'Canny', [], 3);
+
+figure();
+subplot(1,5,1);
+imshow(img);
+title('square')
+
+subplot(1,5,2);
+imshow(sx);
+title('Sobel (x direction)')
+
+subplot(1,5,3);
+imshow(sy);
+title('Sobel (y direction)')
+
+subplot(1,5,4);
+imshow(sob);
+title('Sobel (both)')
+
+subplot(1,5,5);
+imshow(canny);
+title('Canny')
